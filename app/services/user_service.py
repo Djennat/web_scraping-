@@ -3,6 +3,7 @@ from datetime import datetime
 from fastapi import HTTPException
 from app.core.database import db
 from app.schemas.user import UserCreate, UserOut, ScrapingRequestCreate, ScrapingRequestOut
+from app.services.email_service import send_welcome_email
 from passlib.context import CryptContext
 import logging
 
@@ -16,21 +17,29 @@ async def create_user(user: UserCreate) -> UserOut:
     hashed_password = pwd_context.hash(user.password)
     user_doc = {
         "username": user.username,
+        "email": user.email,
         "password": hashed_password,
         "role": user.role,
         "interests": [],
         "allowed_websites": [],
         "created_at": datetime.utcnow()
     }
-    existing_user = await db["users"].find_one({"username": user.username})
+    existing_user = await db["users"].find_one({"$or": [{"username": user.username}, {"email": user.email}]})
     if existing_user:
-        logger.error(f"Username {user.username} already exists")
-        raise HTTPException(status_code=400, detail="Username already exists")
+        logger.error(f"Username {user.username} or email {user.email} already exists")
+        raise HTTPException(status_code=400, detail="Username or email already exists")
     result = await db["users"].insert_one(user_doc)
-    user_doc["id"] = str(result.inserted_id)  # Rename _id to id for UserOut
-    user_doc.pop("_id", None)  # Remove _id to avoid conflicts
+    user_doc["id"] = str(result.inserted_id) 
+    user_doc.pop("_id", None) 
     logger.info(f"User {user.username} created with ID {user_doc['id']}")
-    logger.debug(f"UserOut input: {user_doc}")
+    
+    logger.info(f"Attempting to send welcome email to {user.email}")
+    try:
+        await send_welcome_email(user.email, user.username, user.password, user.role)
+        logger.info(f"Welcome email sent successfully to {user.email}")
+    except Exception as e:
+        logger.error(f"Failed to send welcome email to {user.email}: {str(e)}")
+    
     try:
         user_out = UserOut(**user_doc)
         return user_out

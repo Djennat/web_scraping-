@@ -18,7 +18,7 @@ class ScrapingRequest(BaseModel):
 
 class ScrapingResult(BaseModel):
     user_id: str
-    website_url: str
+    website_url:List[str]
     keywords: List[str]
     results: dict
     scraped_at: datetime = datetime.utcnow()

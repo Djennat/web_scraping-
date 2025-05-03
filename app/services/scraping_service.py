@@ -10,10 +10,10 @@ from bson import ObjectId
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Temporary in-memory queue for XMLs (request_id -> {user_id, website_url, content})
+
 xml_queue = {}
 
-def store_xml_temp(user_id: str, website_url: str, content: bytes) -> str:
+def store_xml_temp(user_id: str, website_url: List[str], content: bytes) -> str:
     logger.info(f"Queuing XML for user {user_id}")
     request_id = str(uuid.uuid4())
     xml_queue[request_id] = {
@@ -27,7 +27,7 @@ def get_xml_temp(user_id: str, request_id: str) -> Optional[bytes]:
     logger.info(f"Retrieving XML for user {user_id} with request_id {request_id}")
     if request_id in xml_queue and xml_queue[request_id]["user_id"] == user_id:
         content = xml_queue[request_id]["content"]
-        del xml_queue[request_id]  # Remove after fetching
+        del xml_queue[request_id]
         logger.info(f"XML retrieved for request_id {request_id}")
         return content
     logger.warning(f"No XML found for user {user_id} with request_id {request_id}")
@@ -37,7 +37,7 @@ async def store_scraping_result(user_id: str, result: ScrapingResultCreate) -> S
     logger.info(f"Storing scraping result for user {user_id}")
     result_doc = {
         "user_id": user_id,
-        "website_url": result.website_url,
+        "website_url": result.website_url if isinstance(result.website_url, list) else [result.website_url],
         "keywords": result.keywords,
         "results": result.results,
         "scraped_at": datetime.utcnow()

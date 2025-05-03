@@ -3,17 +3,17 @@ from typing import List, Dict
 from datetime import datetime
 
 class ScrapingXML(BaseModel):
-    url: str
+    url: List[str]
     keywords: List[str]
 
 class ScrapingResultCreate(BaseModel):
-    website_url: str
+    website_url:List[str]
     keywords: List[str]
     results: Dict
 
 class ScrapingResultOut(BaseModel):
     id: str
-    website_url: str
+    website_url:List[str]
     keywords: List[str]
     results: Dict
     scraped_at: datetime

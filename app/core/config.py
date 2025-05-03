@@ -1,6 +1,6 @@
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
-from typing import List
+from typing import List, Optional
 
 load_dotenv()
 
@@ -9,6 +9,10 @@ class Settings(BaseSettings):
     MONGODB_URL: str
     DATABASE_NAME: str
     CORS_ORIGINS: str
+    EMAIL_SENDER: Optional[str] = None
+    EMAIL_PASSWORD: Optional[str] = None
+    SMTP_SERVER: str = "smtp.gmail.com"
+    SMTP_PORT: int = 587
 
     @property
     def cors_origins_list(self) -> List[str]:

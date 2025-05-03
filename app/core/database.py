@@ -1,19 +1,17 @@
+# database.py
 from motor.motor_asyncio import AsyncIOMotorClient
-import os
-from dotenv import load_dotenv
+from app.core.config import settings
 import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-load_dotenv()
-
-MONGODB_URL = os.getenv("MONGODB_URL")
-DATABASE_NAME = os.getenv("DATABASE_NAME")
+MONGODB_URL = settings.MONGODB_URL
+DATABASE_NAME = settings.DATABASE_NAME
 
 if not MONGODB_URL or not DATABASE_NAME:
-    logger.error("MONGODB_URL or DATABASE_NAME not set in .env")
-    raise ValueError("MONGODB_URL and DATABASE_NAME must be set in .env")
+    logger.error("MONGODB_URL or DATABASE_NAME not set")
+    raise ValueError("MONGODB_URL and DATABASE_NAME must be set")
 
 try:
     client = AsyncIOMotorClient(MONGODB_URL)
