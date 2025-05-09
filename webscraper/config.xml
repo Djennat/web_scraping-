@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sites>
+    <site>
+        <url>https://www.bbc.com/news</url>
+        <keywords>
+            <keyword>news</keyword>
+            <keyword>BBC</keyword>
+            <keyword>latest</keyword>
+        </keywords>
+    </site>
+    
+    <site>
+        <url>https://www.reuters.com</url>
+        <keywords>
+            <keyword>news</keyword>
+            <keyword>reuters</keyword>
+            <keyword>latest</keyword>
+        </keywords>
+    </site>
+    
+    <site>
+        <url>https://www.theguardian.com/international</url>
+        <keywords>
+            <keyword>news</keyword>
+            <keyword>guardian</keyword>
+            <keyword>latest</keyword>
+        </keywords>
+    </site>
+</sites>
