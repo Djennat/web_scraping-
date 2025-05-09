@@ -1,0 +1,40 @@
+1746815244029	geckodriver	INFO	Listening on 127.0.0.1:61464
+1746815247092	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "--remote-debugging-port" "6146 ... " "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\celine\\AppData\\Local\\Temp\\rust_mozprofilef3pyJy"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+Dynamically enable window occlusion 0
+1746815247834	Marionette	INFO	Marionette enabled
+1746815248028	Marionette	INFO	Listening on port 61477
+WebDriver BiDi listening on ws://127.0.0.1:61465
+Read port: 61477
+1746815248287	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: [Exception... "Component returned failure code: 0x80070057 (NS_ERROR_ILLEGAL_VALUE) [nsIWinTaskbar.getTaskbarProgress]"  nsresult: "0x80070057 (NS_ERROR_ILLEGAL_VALUE)"  location: "JS frame :: resource:///modules/DownloadsTaskbar.sys.mjs :: _attachIndicator :: line 127"  data: no]
+JavaScript warning: https://uk-script.dotmetrics.net/door.js?d=www.bbc.com&t=newsstudio, line 265: unreachable code after return statement
+JavaScript error: https://cdn.cxense.com/sp1.html#ver=3.0.4&typ=pgv&rnd=mah4p9jnnhqye6z1&sid=3606632254074155369&loc=https%3A%2F%2Fwww.bbc.com%2Fnews&new=1&arf=0&ltm=1746815258976&ref=&tzo=-60&wsz=1366x683&res=1366x768&dpr=1&col=24&bln=fr&chs=UTF-8&cks=mah4pc3qwc7vji24&ckp=mah4p9jnp21qnrjx&glb=&cp_userState=anon, line 1: TypeError: cX.loadScript is not a function
+JavaScript error: , line 0: uncaught exception: undefined
+JavaScript warning: https://static.files.bbci.co.uk/bbcdotcom/web/20250428-123652-7bc49a8f4-web-2.20.1-1/_next/static/chunks/pages/_app-3d511d1eef55eff6.js, line 18: Script terminated by timeout at:
+m@https://static.files.bbci.co.uk/bbcdotcom/web/20250428-123652-7bc49a8f4-web-2.20.1-1/_next/static/chunks/pages/_app-3d511d1eef55eff6.js:18:75616
+82247/x/</<@https://static.files.bbci.co.uk/bbcdotcom/web/20250428-123652-7bc49a8f4-web-2.20.1-1/_next/static/chunks/pages/_app-3d511d1eef55eff6.js:18:75699
+82247/v/<@https://static.files.bbci.co.uk/bbcdotcom/web/20250428-123652-7bc49a8f4-web-2.20.1-1/_next/static/chunks/pages/_app-3d511d1eef55eff6.js:18:73054
+n@https://static.files.bbci.co.uk/bbcdotcom/web/20250428-123652-7bc49a8f4-web-2.20.1-1/_next/static/chunks/pages/_app-3d511d1eef55eff6.js:18:72925
+
+JavaScript error: https://www.reuters.com/, line 67: TypeError: googleAdContainer is null
+JavaScript warning: https://www.reuters.com/pf/resources/dist/reuters/js/index.js?d=284, line 2: Script terminated by timeout at:
+a@https://www.reuters.com/pf/resources/dist/reuters/js/index.js?d=284:2:63263
+Qe/</<@https://www.reuters.com/pf/resources/dist/reuters/js/index.js?d=284:2:63346
+x/<@https://www.reuters.com/pf/resources/dist/reuters/js/index.js?d=284:2:8421
+e@https://www.reuters.com/pf/resources/dist/reuters/js/index.js?d=284:2:8292
+
+JavaScript warning: https://imasdk.googleapis.com/js/core/bridge3.695.1_en.html#fid=goog_1165147217, line 11: Script terminated by timeout at:
+w@https://imasdk.googleapis.com/js/core/bridge3.695.1_en.html#fid=goog_1165147217:11:367
+QE/this.X@https://imasdk.googleapis.com/js/core/bridge3.695.1_en.html#fid=goog_1165147217:463:37
+
+1746815322434	Marionette	INFO	Stopped listening on port 61477
+Dynamically enable window occlusion 1
+JavaScript warning: https://assets.guim.co.uk/assets/index.client.web.cbb1e3d6b3d63441b6a8.js, line 1: Script terminated by timeout at:
+state@https://assets.guim.co.uk/assets/index.client.web.cbb1e3d6b3d63441b6a8.js:1:36154
+12850/init/<@https://assets.guim.co.uk/assets/index.client.web.cbb1e3d6b3d63441b6a8.js:1:45377
+
+[GFX1-]: VideoBridgeParent receives IPC close with reason=AbnormalShutdown
