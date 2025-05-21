@@ -21,7 +21,7 @@ async def create_user(user: UserCreate) -> UserOut:
         "password": hashed_password,
         "role": user.role,
         "interests": [],
-        "allowed_websites": [],
+        "allowed_websites": user.allowed_websites,
         "created_at": datetime.utcnow()
     }
     existing_user = await db["users"].find_one({"$or": [{"username": user.username}, {"email": user.email}]})

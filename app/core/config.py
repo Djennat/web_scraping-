@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     EMAIL_PASSWORD: Optional[str] = None
     SMTP_SERVER: str = "smtp.gmail.com"
     SMTP_PORT: int = 587
+    SUPABASE_URL: str
+    SUPABASE_KEY: str
 
     @property
     def cors_origins_list(self) -> List[str]:

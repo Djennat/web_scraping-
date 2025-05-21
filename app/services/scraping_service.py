@@ -3,6 +3,8 @@ from datetime import datetime
 from fastapi import HTTPException
 from app.core.database import db
 from app.schemas.scraping import ScrapingResultCreate, ScrapingResultOut
+from app.core.supabase import supabase
+
 import uuid
 import logging
 from bson import ObjectId
@@ -35,6 +37,8 @@ def get_xml_temp(user_id: str, request_id: str) -> Optional[bytes]:
 
 async def store_scraping_result(user_id: str, result: ScrapingResultCreate) -> ScrapingResultOut:
     logger.info(f"Storing scraping result for user {user_id}")
+
+    # Step 1: Prepare document for MongoDB
     result_doc = {
         "user_id": user_id,
         "website_url": result.website_url if isinstance(result.website_url, list) else [result.website_url],
@@ -42,22 +46,45 @@ async def store_scraping_result(user_id: str, result: ScrapingResultCreate) -> S
         "results": result.results,
         "scraped_at": datetime.utcnow()
     }
+
+    # Step 2: Store in MongoDB
     inserted = await db["scraping_results"].insert_one(result_doc)
     result_doc["id"] = str(inserted.inserted_id)
     result_doc.pop("_id", None)
-    logger.info(f"Scraping result stored with ID {result_doc['id']}")
+
+    logger.info(f"Scraping result stored in MongoDB with ID {result_doc['id']}")
+
+    # Step 3: Prepare for Supabase (flatten website_url to comma-separated string)
+    try:
+        supabase_result = supabase.table("scraping_results").insert({
+            "result_id": result_doc["id"],
+            "user_id": user_id,
+            "website_url": ", ".join(result_doc["website_url"]),
+            "keywords": result_doc["keywords"],
+            "results": result_doc["results"],
+            "scraped_at": result_doc["scraped_at"].isoformat()
+        }).execute()
+
+        logger.info("Scraping result also stored in Supabase.")
+    except Exception as e:
+        logger.error(f"Failed to store result in Supabase: {e}")
+
     return ScrapingResultOut(**result_doc)
 
 async def get_user_scraping_results(user_id: str) -> List[ScrapingResultOut]:
     logger.info(f"Retrieving scraping results for user {user_id}")
-    results = []
-    cursor = db["scraping_requests"].find({"user_id": user_id})
-    async for result in cursor:
-        result["id"] = str(result["_id"])
-        result.pop("_id", None)
-        results.append(ScrapingResultOut(**result))
-    logger.info(f"Retrieved {len(results)} scraping results for user {user_id}")
-    return results
+    try:
+        response = supabase.table("scraping_results").select("*").eq("user_id", user_id).execute()
+        results = []
+        for result in response.data:
+            # Convert comma-separated website_url back to list
+            result["website_url"] = [url.strip() for url in result["website_url"].split(",")]
+            results.append(ScrapingResultOut(**result))
+        logger.info(f"Retrieved {len(results)} scraping results for user {user_id} from Supabase")
+        return results
+    except Exception as e:
+        logger.error(f"Failed to retrieve results from Supabase: {e}")
+        return []
 
 async def approve_scraping_request(request_id: str, admin_id: str):
     logger.info(f"Approving scraping request {request_id} by admin {admin_id}")

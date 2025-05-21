@@ -7,6 +7,7 @@ class UserBase(BaseModel):
     email: EmailStr
     interests: Optional[List[str]] = []
     allowed_websites: Optional[List[str]] = []
+    allowed_websites: Optional[List[str]] = None
 
 class UserCreate(BaseModel):
     username: str

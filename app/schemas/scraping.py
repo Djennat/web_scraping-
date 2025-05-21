@@ -9,13 +9,13 @@ class ScrapingXML(BaseModel):
 class ScrapingResultCreate(BaseModel):
     website_url:List[str]
     keywords: List[str]
-    results: Dict
+    results: str
 
 class ScrapingResultOut(BaseModel):
     id: str
     website_url:List[str]
     keywords: List[str]
-    results: Dict
+    results: str
     scraped_at: datetime
 
 class ScrapingRequestOut(BaseModel):
