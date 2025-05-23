@@ -91,3 +91,35 @@ async def get_scraping_results(current_user: dict = Depends(get_current_user)):
     results = await get_user_scraping_results(current_user["_id"])
     logger.info(f"Retrieved {len(results)} results")
     return results
+
+@router.get("/xml-requests")
+async def get_all_xml_requests(current_user: dict = Depends(get_current_user)):
+    try:
+        # Check if user is admin
+        if current_user.get("role") != "admin":
+            raise HTTPException(
+                status_code=403,
+                detail="Only administrators can view all XML requests"
+            )
+
+        logger.info(f"Admin {current_user['_id']} retrieving all XML requests")
+        
+        # Get all XML requests from database
+        xml_requests = await db["xml_requests"].find({}).to_list(length=None)
+        
+        # Convert ObjectId to string and format dates for each request
+        for request in xml_requests:
+            request["_id"] = str(request["_id"])
+            request["user_id"] = str(request["user_id"])
+            request["created_at"] = request["created_at"].isoformat()
+        
+        logger.info(f"Retrieved {len(xml_requests)} total XML requests")
+        return xml_requests
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error retrieving XML requests: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to retrieve XML requests"
+        )

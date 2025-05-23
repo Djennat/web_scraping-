@@ -130,3 +130,78 @@ async def send_scraping_status_email(email: str, username: str, website_url: str
     except Exception as e:
         logger.error(f"Failed to send status email: {str(e)}")
         # Don't raise an exception here as we don't want to fail the request if email fails
+
+async def send_scraping_results_email(email: str, username: str, website_url: str, result_id: str):
+    logger.info(f"Attempting to send results email to {email} for result {result_id}")
+    
+    if not settings.EMAIL_SENDER or not settings.EMAIL_PASSWORD:
+        logger.error(f"Email settings not configured. EMAIL_SENDER: {settings.EMAIL_SENDER}, EMAIL_PASSWORD: {'Set' if settings.EMAIL_PASSWORD else 'Not Set'}")
+        return
+
+    try:
+        logger.info(f"Creating email message for {email}")
+        msg = MIMEMultipart("alternative")
+        msg['From'] = f"WebScraping Service <{settings.EMAIL_SENDER}>"
+        msg['To'] = email
+        msg['Subject'] = "Your Scraping Results Are Ready!"
+        msg['Reply-To'] = settings.EMAIL_SENDER
+
+        # Plain text version
+        plain_text = f"""
+Hello {username},
+
+Great news! Your scraping results for {website_url} are now ready.
+
+You can view your results by logging into your account and checking your dashboard.
+
+Result ID: {result_id}
+
+Best regards,
+The Scraping Platform Team
+        """
+
+        # HTML version
+        html_body = f"""
+        <html>
+            <body>
+                <h2>Your Scraping Results Are Ready!</h2>
+                <p>Hello {username},</p>
+                <p>Great news! Your scraping results for <strong>{website_url}</strong> are now ready.</p>
+                <p>You can view your results by logging into your account and checking your dashboard.</p>
+                <p><strong>Result ID:</strong> {result_id}</p>
+                <p>Best regards,<br>The Scraping Platform Team</p>
+            </body>
+        </html>
+        """
+
+        msg.attach(MIMEText(plain_text, 'plain'))
+        msg.attach(MIMEText(html_body, 'html'))
+
+        logger.info(f"Connecting to SMTP server: {settings.SMTP_SERVER}:{settings.SMTP_PORT}")
+        server = smtplib.SMTP(settings.SMTP_SERVER, settings.SMTP_PORT)
+        server.set_debuglevel(1)  # Enable debug output
+
+        try:
+            logger.info("Starting TLS connection")
+            server.starttls()
+
+            logger.info(f"Logging in to SMTP server with email: {settings.EMAIL_SENDER}")
+            server.login(settings.EMAIL_SENDER, settings.EMAIL_PASSWORD)
+
+            logger.info("Sending email message")
+            server.send_message(msg)
+            logger.info(f"Results notification email successfully sent to {email} for result {result_id}")
+        except smtplib.SMTPAuthenticationError as e:
+            logger.error(f"SMTP Authentication Error: {str(e)}")
+            logger.error("Make sure you're using an App-Specific password for Gmail (not your regular password)")
+        except smtplib.SMTPException as e:
+            logger.error(f"SMTP Error: {str(e)}")
+        finally:
+            server.quit()
+            logger.info("SMTP connection closed")
+    except Exception as e:
+        logger.error(f"Failed to send results notification email: {str(e)}")
+        logger.error(f"Error type: {type(e).__name__}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        # Don't raise an exception as we don't want to fail the request if email fails
