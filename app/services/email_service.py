@@ -90,3 +90,43 @@ The Admin Team
     except Exception as e:
         logger.error(f"Unexpected error while sending email: {str(e)}")
         logger.error(f"Error type: {type(e).__name__}")
+
+async def send_scraping_status_email(email: str, username: str, website_url: str, status: str, admin_message: str = None):
+    if not settings.EMAIL_SENDER or not settings.EMAIL_PASSWORD:
+        logger.warning("Email credentials not configured, skipping status email")
+        return
+
+    msg = MIMEMultipart()
+    msg['From'] = settings.EMAIL_SENDER
+    msg['To'] = email
+    msg['Subject'] = f"Scraping Request {status.capitalize()}"
+
+    body = f"""
+    Hello {username},
+
+    Your scraping request for {website_url} has been {status.lower()}.
+
+    """
+
+    if admin_message:
+        body += f"\nAdmin Message: {admin_message}\n"
+
+    body += """
+    You can check the status of your request in your dashboard.
+
+    Best regards,
+    The Scraping Platform Team
+    """
+
+    msg.attach(MIMEText(body, 'plain'))
+
+    try:
+        server = smtplib.SMTP(settings.SMTP_SERVER, settings.SMTP_PORT)
+        server.starttls()
+        server.login(settings.EMAIL_SENDER, settings.EMAIL_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+        logger.info(f"Status email sent to {email} for request {status}")
+    except Exception as e:
+        logger.error(f"Failed to send status email: {str(e)}")
+        # Don't raise an exception here as we don't want to fail the request if email fails

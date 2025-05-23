@@ -22,10 +22,10 @@ async def upload_xml(xml_data: ScrapingXML, current_user: dict = Depends(get_cur
         logger.info(f"Creating XML request for user {current_user['_id']}")
         
         # Check if all URLs in the list are allowed
-        for url in xml_data.url:
-            if url not in current_user["allowed_websites"]:
-                logger.error(f"Website {url} not allowed for user {current_user['_id']}")
-                raise HTTPException(status_code=403, detail=f"Website {url} not allowed for scraping")
+        # for url in xml_data.url:
+        #     if url not in current_user["allowed_websites"]:
+        #         logger.error(f"Website {url} not allowed for user {current_user['_id']}")
+        #         raise HTTPException(status_code=403, detail=f"Website {url} not allowed for scraping")
         
         # Generate XML content
         xml_content = generate_xml(xml_data.url, xml_data.keywords)
@@ -38,6 +38,7 @@ async def upload_xml(xml_data: ScrapingXML, current_user: dict = Depends(get_cur
             "user_id": current_user["_id"],
             "request_id": request_id,
             "website_url": xml_data.url,
+            "status": "pending",
             "xml_content": xml_content.decode('utf-8'),
             "created_at": datetime.utcnow()
         }

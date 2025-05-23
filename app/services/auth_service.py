@@ -33,6 +33,8 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     user = await db["users"].find_one({"username": username})
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
+    if not user.get("is_active", True):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="User account is deactivated")
     user["_id"] = str(user["_id"])
     return user
 

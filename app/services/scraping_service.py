@@ -4,6 +4,7 @@ from fastapi import HTTPException
 from app.core.database import db
 from app.schemas.scraping import ScrapingResultCreate, ScrapingResultOut
 from app.core.supabase import supabase
+from app.services.email_service import send_scraping_status_email
 
 import uuid
 import logging
@@ -86,27 +87,78 @@ async def get_user_scraping_results(user_id: str) -> List[ScrapingResultOut]:
         logger.error(f"Failed to retrieve results from Supabase: {e}")
         return []
 
-async def approve_scraping_request(request_id: str, admin_id: str):
-    logger.info(f"Approving scraping request {request_id} by admin {admin_id}")
+async def approve_scraping_request(request_id: str, admin_id: str, admin_message: str = None):
+    logger.info(f"Approving scraping request {request_id}")
+    
+    # Get the request and user info
     request = await db["scraping_requests"].find_one({"_id": ObjectId(request_id)})
     if not request:
-        logger.error(f"Scraping request {request_id} not found")
         raise HTTPException(status_code=404, detail="Scraping request not found")
-    user_id = request["user_id"]
-    website_url = request["website_url"]
-    await db["users"].update_one(
-        {"_id": ObjectId(user_id)},
-        {"$addToSet": {"allowed_websites": website_url}}
+    
+    user = await db["users"].find_one({"_id": ObjectId(request["user_id"])})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Update request status
+    result = await db["scraping_requests"].update_one(
+        {"_id": ObjectId(request_id)},
+        {
+            "$set": {
+                "status": "approved",
+                "approved_by": admin_id,
+                "approved_at": datetime.utcnow()
+            }
+        }
     )
-    await db["scraping_requests"].delete_one({"_id": ObjectId(request_id)})
-    logger.info(f"Scraping request {request_id} approved, website {website_url} added to user {user_id}")
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=400, detail="Failed to approve request")
+    
+    # Send email notification
+    await send_scraping_status_email(
+        email=user["email"],
+        username=user["username"],
+        website_url=request["website_url"],
+        status="approved",
+        # admin_message="Your request has been approved. You can now start scraping this website."
+    )
+    
+    logger.info(f"Scraping request {request_id} approved successfully")
 
-
-async def reject_scraping_request(request_id: str, admin_id: str):
-    logger.info(f"Rejecting scraping request {request_id} by admin {admin_id}")
+async def reject_scraping_request(request_id: str, admin_id: str, admin_message: str = None):
+    logger.info(f"Rejecting scraping request {request_id}")
+    
+    # Get the request and user info
     request = await db["scraping_requests"].find_one({"_id": ObjectId(request_id)})
     if not request:
-        logger.error(f"Scraping request {request_id} not found")
         raise HTTPException(status_code=404, detail="Scraping request not found")
-    await db["scraping_requests"].delete_one({"_id": ObjectId(request_id)})
-    logger.info(f"Scraping request {request_id} rejected")
+    
+    user = await db["users"].find_one({"_id": ObjectId(request["user_id"])})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Update request status
+    result = await db["scraping_requests"].update_one(
+        {"_id": ObjectId(request_id)},
+        {
+            "$set": {
+                "status": "rejected",
+                "rejected_by": admin_id,
+                "rejected_at": datetime.utcnow()
+            }
+        }
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=400, detail="Failed to reject request")
+    
+    # Send email notification
+    await send_scraping_status_email(
+        email=user["email"],
+        username=user["username"],
+        website_url=request["website_url"],
+        status="rejected",
+        # admin_message="Your request has been rejected if you have any question contact admin."
+    )
+    
+    logger.info(f"Scraping request {request_id} rejected successfully")

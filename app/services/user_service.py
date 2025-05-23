@@ -12,6 +12,18 @@ logger = logging.getLogger(__name__)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+DEFAULT_ALLOWED_WEBSITES = [
+    "https://www.cerist.dz/",
+    "https://dgrsdt.dz/",
+    "https://www.crasc.dz/",
+    "https://www.cread.dz/",
+    "https://allconferencealert.net",
+    "https://ruralm.hypotheses.org/",
+    "https://www.univ-boumerdes.dz/universit%C3%A9/cruc.html",
+    "https://www.univ-tlemcen.dz/fr/actualites/3525/scientific-conference-at-the-university-of-tlemcen",
+    "https://www.mesrs.dz"
+]
+
 async def create_user(user: UserCreate) -> UserOut:
     logger.info(f"Creating user {user.username} with role {user.role}")
     hashed_password = pwd_context.hash(user.password)
@@ -21,8 +33,9 @@ async def create_user(user: UserCreate) -> UserOut:
         "password": hashed_password,
         "role": user.role,
         "interests": [],
-        "allowed_websites": user.allowed_websites,
-        "created_at": datetime.utcnow()
+        "allowed_websites": DEFAULT_ALLOWED_WEBSITES,
+        "created_at": datetime.utcnow(),
+        "is_active": True
     }
     existing_user = await db["users"].find_one({"$or": [{"username": user.username}, {"email": user.email}]})
     if existing_user:
