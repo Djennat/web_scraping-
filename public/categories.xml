@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<categories>
+    <category>
+        <name>Artificial Intelligence</name>
+        <sous_category>Machine Learning</sous_category>
+        <sous_category>Deep Learning</sous_category>
+        <sous_category>Artificial Intelligence</sous_category>
+        <sous_category>Computer Vision</sous_category>
+        <sous_category>Natural Language Processing (NLP)</sous_category>
+        <sous_category>Facial Recognition</sous_category>
+        <sous_category>Recommendation Systems</sous_category>
+        <sous_category>Generative AI (text, images, videos)</sous_category>
+        <sous_category>Reinforcement Learning</sous_category>
+        <sous_category>AI Interpretability</sous_category>
+        <sous_category>AI Ethics</sous_category>
+        <sous_category>Intelligent Robotics</sous_category>
+    </category>
+    
+    <category>
+        <name>Cybersecurity</name>
+        <sous_category>Ethical Hacking</sous_category>
+        <sous_category>Network Security</sous_category>
+        <sous_category>Web Application Security</sous_category>
+        <sous_category>Embedded Systems Security</sous_category>
+        <sous_category>Malware Analysis</sous_category>
+        <sous_category>Classical and Quantum Cryptography</sous_category>
+        <sous_category>Vulnerability Management</sous_category>
+        <sous_category>Database Security</sous_category>
+        <sous_category>Cloud Security</sous_category>
+        <sous_category>Digital Forensics (post-attack analysis)</sous_category>
+        <sous_category>Intrusion Detection (IDS/IPS)</sous_category>
+        <sous_category>IoT Security</sous_category>
+        <sous_category>Personal Data Protection (GDPR)</sous_category>
+    </category>
+    
+    <category>
+        <name>Databases</name>
+        <sous_category>Relational Databases (SQL)</sous_category>
+        <sous_category>Non-relational Databases (NoSQL)</sous_category>
+        <sous_category>Data Indexing and Search</sous_category>
+        <sous_category>Database Schema Design</sous_category>
+        <sous_category>SQL Query Optimization</sous_category>
+        <sous_category>MongoDB</sous_category>
+        <sous_category>PostgreSQL</sous_category>
+        <sous_category>MySQL</sous_category>
+        <sous_category>SQLite</sous_category>
+        <sous_category>Databases</sous_category>
+        <sous_category>Data Lakes and Warehouses</sous_category>
+        <sous_category>Data Backup and Recovery</sous_category>
+        <sous_category>Data Modeling (Merise, UML)</sous_category>
+        <sous_category>Access and Privilege Management</sous_category>
+    </category>
+    
+    <category>
+        <name>Data Science , Big Data</name>
+        <sous_category>Data Science</sous_category>
+        <sous_category>Computer Systems</sous_category>
+        <sous_category>Data Visualization (dashboards)</sous_category>
+        <sous_category>Applied Statistics</sous_category>
+        <sous_category>Data Mining</sous_category>
+        <sous_category>Predictive Analytics</sous_category>
+        <sous_category>Supervised and Unsupervised Learning</sous_category>
+        <sous_category>Data Processing Pipelines</sous_category>
+        <sous_category>Real-Time Data Stream Processing</sous_category>
+        <sous_category>Big Data (Hadoop, Spark)</sous_category>
+        <sous_category>Massive Data Exploration</sous_category>
+        <sous_category>Open Data and Public Datasets</sous_category>
+    </category>
+    
+    <category>
+        <name>Software Development</name>
+        <sous_category>Backend Development (REST APIs, GraphQL)</sous_category>
+        <sous_category>Frontend Development (HTML, CSS, JS, frameworks)</sous_category>
+        <sous_category>Full-Stack Development</sous_category>
+        <sous_category>Mobile Development</sous_category>
+        <sous_category>Software Architecture</sous_category>
+        <sous_category>Object-Oriented Design</sous_category>
+        <sous_category>Component-Oriented Design</sous_category>
+        <sous_category>Application Security</sous_category>
+        <sous_category>DevOps</sous_category>
+    </category>
+    
+    <category>
+        <name>Systems and Networks</name>
+        <sous_category>System Administration</sous_category>
+        <sous_category>Virtualization</sous_category>
+        <sous_category>Containers</sous_category>
+        <sous_category>Network Configuration</sous_category>
+        <sous_category>Routing and Switching</sous_category>
+        <sous_category>Network Models</sous_category>
+        <sous_category>Network Security</sous_category>
+        <sous_category>Network Monitoring</sous_category>
+        <sous_category>Server Management</sous_category>
+        <sous_category>Cloud Computing</sous_category>
+        <sous_category>Embedded Systems</sous_category>
+        <sous_category>Distributed Computing</sous_category>
+    </category>
+</categories>
